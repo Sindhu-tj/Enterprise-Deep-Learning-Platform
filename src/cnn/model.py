@@ -1,0 +1,102 @@
+import torch
+import torch.nn as nn
+
+
+class CNN(nn.Module):
+    """
+    Convolutional Neural Network (CNN)
+
+    Architecture:
+    Input -> Conv -> ReLU -> MaxPool
+          -> Conv -> ReLU -> MaxPool
+          -> Conv -> ReLU -> MaxPool
+          -> Flatten
+          -> Fully Connected
+          -> Dropout
+          -> Output
+    """
+
+    def __init__(self, num_classes=10):
+        super(CNN, self).__init__()
+
+        # Feature Extraction
+        self.features = nn.Sequential(
+
+            nn.Conv2d(
+                in_channels=3,
+                out_channels=32,
+                kernel_size=3,
+                padding=1
+            ),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2),
+
+            nn.Conv2d(
+                in_channels=32,
+                out_channels=64,
+                kernel_size=3,
+                padding=1
+            ),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2),
+
+            nn.Conv2d(
+                in_channels=64,
+                out_channels=128,
+                kernel_size=3,
+                padding=1
+            ),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2)
+        )
+
+        # Classifier
+        self.classifier = nn.Sequential(
+
+            nn.Flatten(),
+
+            nn.Linear(
+                128 * 4 * 4,
+                512
+            ),
+
+            nn.ReLU(inplace=True),
+
+            nn.Dropout(0.5),
+
+            nn.Linear(
+                512,
+                num_classes
+            )
+        )
+
+    def forward(self, x):
+
+        x = self.features(x)
+
+        x = self.classifier(x)
+
+        return x
+
+
+if __name__ == "__main__":
+
+    batch_size = 8
+
+    image = torch.randn(
+        batch_size,
+        3,
+        32,
+        32
+    )
+
+    model = CNN(num_classes=10)
+
+    output = model(image)
+
+    print("=" * 60)
+    print("CNN Model Summary")
+    print("=" * 60)
+    print("Input Shape :", image.shape)
+    print("Output Shape:", output.shape)
+    print("=" * 60)
