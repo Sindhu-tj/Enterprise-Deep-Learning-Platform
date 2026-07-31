@@ -1,19 +1,24 @@
 """
-Embeddings Module
+Evaluation Module
 
-This package provides utilities for creating, managing,
-and visualizing embeddings used in deep learning and
-natural language processing.
+This package provides evaluation metrics for Machine Learning
+and Deep Learning models.
 
 Modules:
-- Embedding
-- Visualize
+- Classification Metrics
+- Regression Metrics
+- Confusion Matrix
+- ROC-AUC Score
 """
 
-from .embedding import Embedding
-from .visualize import visualize_embeddings
+from .classification_metrics import classification_metrics
+from .regression_metrics import regression_metrics
+from .confusion_matrix import plot_confusion_matrix
+from .roc_auc import roc_auc_score_plot
 
 __all__ = [
-    "Embedding",
-    "visualize_embeddings",
+    "classification_metrics",
+    "regression_metrics",
+    "plot_confusion_matrix",
+    "roc_auc_score_plot",
 ]
